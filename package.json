@@ -1,0 +1,11 @@
+{
+  "name": "tour-vac",
+  "version": "1.0.0",
+  "description": "A simple API for a tour imaginary company",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Omosekeji Olawale (Narhzih)",
+  "license": "ISC"
+}
