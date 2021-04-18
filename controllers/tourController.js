@@ -57,9 +57,21 @@ exports.getAllTours = async (req, res) => {
       query = query.select('-__v');
     }
 
+    // Pagination
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 10;
+    const skip = (page - 1) * limit;
+
+    if (req.query.page) {
+      const numTours = await Tour.countDocuments();
+      if (skip > numTours) throw new Error('This page does not exist');
+    }
+
+    query = query.skip(skip).limit(limit);
     const tours = await query;
     res.status(201).json({
       status: 'success',
+      results: tours.length,
       data: {
         tours,
       },
