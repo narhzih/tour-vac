@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const globalErrorHandler = require('./../helpers/globalErrorHandler');
-const appError = require('./../helpers/appError');
+const globalErrorHandler = require('../helpers/errors/globalErrorHandler');
+const appError = require('../helpers/errors/appError');
 const tourRoutes = require('./../routes/tourRoutes');
 const userRoutes = require('./../routes/userRoutes');
 

@@ -1,3 +1,5 @@
-1. Handled unhandled route errors
-2. Implement a Global error handler
-3. Add error handler for async functions
+1. Handle Invalid ID errors
+2. Handle duplicate fields errors
+3. Handle MongoDB Validation errors
+4. Handle unhandled rejection errors
+5. Catch uncaught exception errors
