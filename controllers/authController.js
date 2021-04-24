@@ -35,17 +35,14 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signUp = catchAsync(async (req, res) => {
-  const newUser = await User.create(req.body);
-  const token = signToken(newUser.id);
-  // Authenticate a web token after successful sign up
-  res.status(201).json({
-    status: 'success',
-    message: 'Account created successfully',
-    data: {
-      user: newUser,
-      token: token,
-    },
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
   });
+
+  createSendToken(newUser, 201, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -62,14 +59,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new appError('Invalid email and password combination'));
   }
 
-  const token = signToken(user);
-  res.status(201).json({
-    status: 'success',
-    message: 'Login successful',
-    data: {
-      token: token,
-    },
-  });
+  createSendToken(user, 201, res);
 });
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {});
