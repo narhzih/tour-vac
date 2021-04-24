@@ -5,6 +5,12 @@ const appError = require('../helpers/errors/appError');
 const tourRoutes = require('./../routes/tourRoutes');
 const userRoutes = require('./../routes/userRoutes');
 
+/*
+  TODO: Implement Rate limiting
+  TODO: Data sanitization
+  TODO: Send token via Cookies
+  TODO: Prevent parameter pollution
+ */
 app.use(express.json());
 
 app.use('/api/v1/tours', tourRoutes);
