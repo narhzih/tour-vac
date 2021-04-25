@@ -9,6 +9,7 @@ const sendProdError = (err, res) => {
   } else {
     res.status(500).json({
       message: 'Something went very wrong',
+      err,
     });
   }
 };
@@ -30,11 +31,11 @@ module.exports = (err, req, res, next) => {
     sendDevError(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
-    console.log(err);
-    if (err.name === 'CastError') error = DBErrors.handleCastError(error);
-    if (err.code === 11000) error = DBErrors.handleDuplicateFieldError(error);
+    // console.log(`The errmsg is: ${err.errmsg}`);
+    if (err.name === 'CastError') error = DBErrors.handleCastError(err);
+    if (err.code === 11000) error = DBErrors.handleDuplicateFieldError(err);
     if (err.name === 'ValidationError')
-      error = DBErrors.handleValidationError(error);
+      error = DBErrors.handleValidationError(err);
     sendProdError(error, res);
   }
 };
