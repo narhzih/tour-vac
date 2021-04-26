@@ -132,7 +132,34 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   createSendToken(user, 201, res);
 });
-exports.updatePassword = catchAsync(async (req, res, next) => {});
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  const { oldPassword, password, passwordConfirm } = req.body;
+
+  if (!oldPassword || !password || !passwordConfirm) {
+    return next(
+      new appError(
+        'Please provide us with your old password, new password and a confirmation password'
+      )
+    );
+  }
+
+  // Verify old password to see if correct
+  const user = req.user;
+  if (!user.confirmPassword(oldPassword, user.password)) {
+    return next(
+      new appError(
+        "Incorrect old password. Please reset your password if you can't remember"
+      )
+    );
+  }
+
+  user.password = password;
+  user.passwordConfirm = passwordConfirm;
+  await user.save();
+
+  //Reset login token after password change
+  createSendToken(user, 200, res);
+});
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
@@ -148,7 +175,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     // Check if token is still valid & if user has not been deleted after
     // the token was issued
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    const freshUser = User.findById(decoded.id);
+    const freshUser = await User.findById(decoded.id);
     if (!freshUser)
       next(new appError('User with provided token not found', 401));
 

@@ -70,7 +70,7 @@ userSchema.methods.confirmPassword = async function (
 userSchema.methods.passwordChangedAfter = function (JWTTimeStamp) {
   if (this.passwordChangedAt) {
     const changedTimeStamp = parseInt(
-      this.passwordChangedAt.getTime() / 10,
+      this.passwordChangedAt.getTime() / 1000,
       10
     );
 
